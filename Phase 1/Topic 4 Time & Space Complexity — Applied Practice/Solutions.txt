@@ -1,0 +1,157 @@
+1. Two Sum LC #1
+A] 
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)):
+            for j in range(i+1,len(nums)):
+                if nums[i]+nums[j] == target:
+                    output = (i, j)
+        return output
+B]
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        d = dict(enumerate(nums))
+        for i in range (len(nums)):
+            match = target - nums[i]
+            for key, val in d.items():
+                if val == match and key != i:
+                    return [i, key]
+C]
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        d = {val:i for i, val in enumerate(nums)}
+        for i, val in enumerate(nums):
+            match = target - val
+            if match in d and d[match] != i:
+                return [i, d[match]]
+----------------------------------------------------------------------------------
+2. Contains Duplicate LC #217 
+A]
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        d = {num:i for i, num in enumerate(nums)}
+        for i in range(len(nums)):
+            if nums[i] in d and d[nums[i]]!=i:
+                return True
+                
+        return False
+B]
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        s = set(nums)
+        if len(s)<len(nums):
+            return True
+        else:
+            return False
+C]
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        s = set()
+        for n in nums:
+            if n in s:
+                return True
+            else: s.add(n)
+        return False
+----------------------------------------------------------------------------------
+3. Majority Element LC #169 
+A]
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        counts = Counter(nums)
+        return counts.most_common(1)[0][0]
+B]
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        counts = {}
+        threshold = len(nums)//2
+        for num in nums:
+            if num in counts:
+                counts[num] += 1
+            else: counts[num]=1
+            if counts[num] > threshold:
+                return num
+----------------------------------------------------------------------------------
+4. Sort Colors LC #75 
+A]
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                if nums[i]>nums[j]:
+                    temp = nums[i]
+                    nums[i] = nums[j]
+                    nums[j] = temp
+                    
+B]
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                if nums[i]>nums[j]:
+                    nums[i], nums[j] = nums[j], nums[i]
+ 
+----------------------------------------------------------------------------------
+5. Find the Duplicate Number LC #287
+A]
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        count = Counter(nums)
+        return count.most_common(1)[0][0]
+        
+B]
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        nums.sort()
+        for i in range(0, len(nums)-1):
+            if nums[i] == nums[i+1]:
+                return nums[i]
+        
+C]
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        s = set()
+        for num in nums:
+            if num in s:
+                return num
+            else: 
+                s.add(num)
+        
+D]
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow=fast=nums[0]
+        slow=nums[slow]
+        fast=nums[nums[fast]]
+        while(slow!=fast):
+            slow=nums[slow]
+            fast=nums[nums[fast]]
+
+        fast=nums[0]
+        while slow!=fast:
+            slow=nums[slow]
+            fast=nums[fast]
+        return slow
+        
+E]
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow = 0
+        fast = 0
+        slow=nums[slow]
+        fast=nums[nums[fast]]
+        while(slow!=fast):
+            slow=nums[slow]
+            fast=nums[nums[fast]]
+        
+        slow=0
+        while slow!=fast:
+            slow=nums[slow]
+            fast=nums[fast]
+        return slow
+----------------------------------------------------------------------------------
