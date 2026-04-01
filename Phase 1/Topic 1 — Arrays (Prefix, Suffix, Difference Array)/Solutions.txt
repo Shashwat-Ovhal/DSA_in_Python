@@ -1,0 +1,247 @@
+# Solutions.txt
+
+Q. 121. Best Time to Buy and Sell Stock
+A]
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        min_price = float(inf)
+        profit=0
+        for price in prices:
+            if price < min_price:
+                min_price = price
+            elif price - min_price>profit:
+                profit=price-min_price
+        return profit
+
+B]
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        profit = 0
+        buy=0
+        sell=1
+        while sell<len(prices):
+            if prices[buy] < prices[sell]:
+                profit=max(profit, prices[sell]-prices[buy])
+            else:
+                buy=sell
+            sell += 1
+        return profit
+------------------------------------------------------------------
+Q. 1480. Running Sum of 1d Array
+A] 
+class Solution:
+    def runningSum(self, nums: List[int]) -> List[int]:
+        output = []
+        temp = nums[0]
+        output.append(temp)
+        for i in range(1, len(nums)):
+            temp += nums[i]
+            output.append(temp)
+        return output
+------------------------------------------------------------------
+Q. 724. Find Pivot Index
+A] 
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        total = sum(nums)
+        left_sum = 0
+        for i, val in enumerate(nums):
+            if left_sum == total - val - left_sum:
+                return i
+            left_sum += val
+        return -1    
+
+B]
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        i=0
+        while i < len(nums):
+            left_sum=0
+            right_sum=0
+            for j in range(0, i):
+                left_sum += nums[j]
+            for k in range(i+1, len(nums)):
+                right_sum += nums[k]
+            if left_sum==right_sum:
+                return i
+                break
+            else: i+=1
+        return -1
+
+------------------------------------------------------------------
+Q. 238. Product of Array Except Self
+
+A]
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        output=[]
+        i=0
+        while i < len(nums):
+            prefix=1
+            suffix=1
+            for j in range(0, i):
+                prefix *= nums[j]
+            for k in range(i+1, len(nums)):
+                suffix *= nums[k]
+            output.append(prefix*suffix)
+            i+=1
+        return output
+
+B]
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        output=[1]*len(nums)
+        prefix=[1]*len(nums)
+        suffix=[1]*len(nums)
+
+        for i in  range(1,len(nums)):
+            prefix[i] = prefix[i-1]*nums[i-1]
+        for i in  range(len(nums)-2, -1, -1):
+            suffix[i] = suffix[i+1]*nums[i+1]
+        for i in range(len(nums)):
+            output[i] = prefix[i]*suffix[i]
+        return output
+
+C]
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        output=[1]*len(nums)
+        
+        prefix=1
+        for i in range(len(nums)):
+            output[i]=prefix
+            prefix *= nums[i]
+        
+        suffix=1
+        for i in range(len(nums)-1, -1, -1):
+            output[i] *= suffix
+            suffix *= nums[i]
+        return output
+
+------------------------------------------------------------------
+Q. 560. Subarray Sum Equals K		
+A]
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        count = 0
+        for i in range(len(nums)):
+            sum = 0
+            for j in range(i, len(nums)):
+                sum += nums[j]
+                if sum == k:
+                    count += 1
+        return count
+
+B]
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        output = 0
+        temp = 0
+        prefix ={0:1}
+        for n in nums:
+            temp += n
+            diff = temp-k
+            output += prefix.get(diff, 0)
+            prefix[temp] = 1+prefix.get(temp, 0)
+        return output
+
+------------------------------------------------------------------
+Q. 303. Range Sum Query - Immutable 
+A]
+class NumArray(object):
+
+    def __init__(self, nums):
+        """
+        :type nums: List[int]
+        """
+        self.prefix = []
+        temp = 0
+        for n in nums:
+            temp += n
+            self.prefix.append(temp)
+        
+
+    def sumRange(self, left, right):
+        """
+        :type left: int
+        :type right: int
+        :rtype: int
+        """
+        right_sum = self.prefix[right]
+        if left!=0:
+            left_sum = self.prefix[left-1]
+        else:
+            left_sum = 0
+        return right_sum - left_sum
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# param_1 = obj.sumRange(left,right)
+
+------------------------------------------------------------------
+Q. 1109. Corporate Flight Bookings
+A]
+class Solution:
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        labels = []
+        temp = [0]*n
+        for i in range(1, n+1):
+            labels.append(i)
+        map = dict(zip(labels, temp))
+        for entry in bookings:
+            x = entry[0]
+            y = entry[1]
+            for j in range(x, y+1):
+                map[j] += entry[2]
+        
+        return list(map.values())
+
+B]
+class Solution:
+
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        answer = [0] * (n + 1)
+
+        for first, last, seats in bookings:
+            answer[first - 1] += seats
+            if last < n:
+                answer[last] -= seats
+        
+        for i in range(1, n):
+            answer[i] += answer[i - 1]
+        
+        return answer[:n]
+
+------------------------------------------------------------------
+Q. 1094.
+A]
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        temp = []
+        for ppl, start, end in trips:
+            temp.append((start, +ppl))
+            temp.append((end, -ppl))
+        temp.sort()
+        for _, ppl in temp:
+            capacity -= ppl
+            if capacity < 0:
+                return False
+        return True 
+
+B]
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        temp = [0]*1001
+        for ppl, start, end in trips:
+            temp[start] += ppl
+            temp[end] -= ppl
+        
+        curr_ppl = 0
+        for change in temp:
+            curr_ppl += change
+            if curr_ppl > capacity:
+                return False
+        else: return True
+
+------------------------------------------------------------------
+
